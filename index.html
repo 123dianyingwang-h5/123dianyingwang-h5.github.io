@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>123电影网 - 全网影视资源一键直达</title>
+<meta name="description" content="123电影网(123dianyingwang-h5)汇聚全网最新电影、热播剧集、综艺动漫资源，一键直达，极速播放，支持手机电脑多端访问。">
+<meta name="keywords" content="123电影网, 123dianyingwang-h5, 电影在线观看, 全网影视, 高清电影">
+<meta name="author" content="123电影网">
+<meta name="robots" content="index,follow">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit">
+<link rel="canonical" href="https://123dianyingwang-h5">
+
+<style>
+:root {
+    --cyan: #00f0ff;
+    --magenta: #ff00ff;
+    --purple: #7b2dff;
+    --dark: #0a0a0f;
+    --darker: #050508;
+    --card-bg: rgba(20, 20, 35, 0.7);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Consolas", "Microsoft YaHei", monospace;
+    background: var(--dark);
+    color: #e0e0ff;
+    line-height: 1.7;
+    font-size: 15px;
+    overflow-x: hidden;
+}
+
+/* CRT 扫描线 + 暗角 */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.15) 2px,
+        rgba(0, 0, 0, 0.15) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.6) 100%);
+    pointer-events: none;
+    z-index: 9998;
+}
+
+a {
+    color: var(--cyan);
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+a:hover {
+    color: var(--magenta);
+    text-shadow: 0 0 8px var(--magenta);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 顶部通告 */
+.top-bar {
+    background: linear-gradient(90deg, var(--purple), var(--magenta), var(--cyan));
+    background-size: 200% 100%;
+    animation: gradientShift 3s ease infinite;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 13px;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 10;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* 头部 */
+header {
+    background: var(--darker);
+    padding: 60px 0 50px;
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+    position: relative;
+}
+
+header::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(123, 45, 255, 0.15), transparent 70%);
+}
+
+header h1 {
+    font-size: 52px;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 2px;
+    position: relative;
+    text-transform: uppercase;
+    text-shadow: 0 0 20px var(--cyan), 0 0 40px var(--cyan);
+}
+
+/* Glitch 动画 */
+.glitch {
+    position: relative;
+    display: inline-block;
+}
+
+.glitch::before,
+.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glitch::before {
+    color: var(--magenta);
+    animation: glitch1 2s infinite;
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+}
+
+.glitch::after {
+    color: var(--cyan);
+    animation: glitch2 2.5s infinite;
+    clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+}
+
+@keyframes glitch1 {
+    0%, 100% { transform: translate(0); }
+    20% { transform: translate(-2px, 1px); }
+    40% { transform: translate(2px, -1px); }
+    60% { transform: translate(-1px, 2px); }
+    80% { transform: translate(1px, -2px); }
+}
+
+@keyframes glitch2 {
+    0%, 100% { transform: translate(0); }
+    25% { transform: translate(2px, 0); }
+    50% { transform: translate(-2px, 1px); }
+    75% { transform: translate(1px, -1px); }
+}
+
+header p {
+    font-size: 14px;
+    color: var(--cyan);
+    margin-top: 16px;
+    opacity: 0.8;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+/* 导航 */
+nav {
+    background: rgba(10, 10, 15, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    flex-wrap: wrap;
+}
+
+nav ul li a {
+    display: block;
+    padding: 16px 28px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #a0a0c0;
+    position: relative;
+}
+
+nav ul li a::before {
+    content: ">";
+    margin-right: 6px;
+    color: var(--cyan);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+nav ul li a:hover::before {
+    opacity: 1;
+}
+
+nav ul li a:hover {
+    color: var(--cyan);
+    text-shadow: 0 0 10px var(--cyan);
+}
+
+/* 通用栏目 */
+.section {
+    padding: 70px 0;
+    position: relative;
+}
+
+.section-head {
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.section-head .code {
+    display: inline-block;
+    font-size: 12px;
+    color: var(--magenta);
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    font-family: monospace;
+}
+
+.section-head .code::before {
+    content: "[ ";
+}
+
+.section-head .code::after {
+    content: " ]";
+}
+
+.section-head h2 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 2px;
+    text-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+}
+
+.section-head p {
+    color: #7080a0;
+    font-size: 13px;
+    margin-top: 10px;
+    letter-spacing: 2px;
+}
+
+/* 卡片网格 */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid rgba(0, 240, 255, 0.2);
+    border-radius: 8px;
+    padding: 32px 28px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    backdrop-filter: blur(5px);
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    transition: left 0.6s;
+}
+
+.card:hover::before {
+    left: 100%;
+}
+
+.card:hover {
+    border-color: var(--cyan);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
+    transform: translateY(-4px);
+}
+
+.card .tag {
+    display: inline-block;
+    font-size: 11px;
+    padding: 3px 10px;
+    background: rgba(255, 0, 255, 0.15);
+    color: var(--magenta);
+    border-radius: 3px;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+}
+
+.card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+}
+
+.card p {
+    font-size: 13px;
+    color: #8090b0;
+    margin-bottom: 20px;
+    line-height: 1.8;
+}
+
+.card .btn {
+    display: inline-block;
+    padding: 10px 24px;
+    background: transparent;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+
+.card .btn:hover {
+    background: var(--cyan);
+    color: var(--dark);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+}
+
+/* 分类标签 */
+.cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+.cat-item {
+    background: var(--card-bg);
+    border: 1px solid rgba(123, 45, 255, 0.3);
+    border-radius: 6px;
+    padding: 24px 16px;
+    text-align: center;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.cat-item:hover {
+    border-color: var(--magenta);
+    background: rgba(255, 0, 255, 0.05);
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.15);
+}
+
+.cat-item h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+}
+
+.cat-item p {
+    font-size: 12px;
+    color: var(--cyan);
+    opacity: 0.7;
+}
+
+/* 时间轴 */
+.timeline {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.tl-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+    gap: 24px;
+}
+
+.tl-date {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--cyan);
+    min-width: 100px;
+    font-family: monospace;
+}
+
+.tl-content h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+}
+
+.tl-content p {
+    font-size: 13px;
+    color: #7080a0;
+}
+
+/* 数据统计 */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.stat-box {
+    background: var(--card-bg);
+    border: 1px solid rgba(0, 240, 255, 0.15);
+    border-radius: 8px;
+    padding: 32px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-box::after {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--cyan), var(--magenta), var(--purple));
+}
+
+.stat-box .num {
+    font-size: 38px;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--cyan), var(--magenta));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+}
+
+.stat-box .label {
+    font-size: 12px;
+    color: #7080a0;
+    margin-top: 10px;
+    letter-spacing: 1px;
+}
+
+/* 关于 */
+.about-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.about-text {
+    background: var(--card-bg);
+    border: 1px solid rgba(0, 240, 255, 0.15);
+    border-radius: 8px;
+    padding: 36px;
+    backdrop-filter: blur(5px);
+}
+
+.about-text p {
+    font-size: 14px;
+    color: #90a0c0;
+    margin-bottom: 16px;
+    line-height: 1.9;
+}
+
+.about-text strong {
+    color: var(--cyan);
+}
+
+/* 关键词云 */
+.kw-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.kw-cloud span {
+    padding: 6px 16px;
+    background: var(--card-bg);
+    border: 1px solid rgba(0, 240, 255, 0.2);
+    border-radius: 3px;
+    font-size: 12px;
+    color: var(--cyan);
+    font-family: monospace;
+}
+
+.kw-cloud span:hover {
+    border-color: var(--magenta);
+    color: var(--magenta);
+}
+
+/* 页脚 */
+footer {
+    background: var(--darker);
+    border-top: 1px solid rgba(0, 240, 255, 0.15);
+    padding: 50px 0 20px;
+    position: relative;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.footer-col h4 {
+    color: #fff;
+    font-size: 14px;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+}
+
+.footer-col h4::before {
+    content: "// ";
+    color: var(--cyan);
+}
+
+.footer-col a {
+    display: block;
+    color: #7080a0;
+    font-size: 13px;
+    padding: 4px 0;
+}
+
+.footer-col a:hover {
+    color: var(--cyan);
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(0, 240, 255, 0.1);
+    padding-top: 24px;
+    text-align: center;
+    font-size: 12px;
+    color: #506070;
+}
+
+.footer-bottom p {
+    margin-bottom: 4px;
+}
+
+/* 移动端 */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 32px;
+    }
+
+    .section {
+        padding: 40px 0;
+    }
+
+    .section-head h2 {
+        font-size: 24px;
+    }
+
+    nav ul {
+        overflow-x: auto;
+        justify-content: flex-start;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    nav ul li a {
+        padding: 12px 18px;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .about-wrap {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+    }
+
+    .tl-item {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .tl-date {
+        min-width: auto;
+    }
+
+    .stat-box .num {
+        font-size: 28px;
+    }
+}
+</style>
+</head>
+
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<div class="top-bar">
+    ▶ 123电影网 官方入口：https://123dianyingwang-h5 | SYSTEM ONLINE
+</div>
+
+<header>
+    <div class="container">
+        <h1 class="glitch" data-text="123电影网">123电影网</h1>
+        <p>// INITIALIZING CINEMA DATABASE //</p>
+    </div>
+</header>
+
+<nav>
+    <div class="container">
+        <ul>
+            <li><a href="#home">HOME / 首页</a></li>
+            <li><a href="#movies">MOVIES / 电影库</a></li>
+            <li><a href="#tv">SERIES / 剧集</a></li>
+            <li><a href="#update">UPDATE / 更新日志</a></li>
+            <li><a href="#about">ABOUT / 关于</a></li>
+        </ul>
+    </div>
+</nav>
+
+<section class="section" id="home">
+    <div class="container">
+        <div class="section-head">
+            <div class="code">SECTION 01</div>
+            <h2>为什么选择 123电影网</h2>
+            <p>// 123dianyingwang-h5 //</p>
+        </div>
+        <div class="grid">
+            <div class="card">
+                <span class="tag">UNLIMITED</span>
+                <h3>海量片源</h3>
+                <p>收录全球最新院线大片、经典老片、网络剧集，资源覆盖全类型全年代。</p>
+                <a href="#" class="btn">ACCESS</a>
+            </div>
+            <div class="card">
+                <span class="tag">SPEED</span>
+                <h3>极速播放</h3>
+                <p>多线路智能分发，P2P加速技术，秒开不卡顿，4K超清流畅播放。</p>
+                <a href="#" class="btn">ACCESS</a>
+            </div>
+            <div class="card">
+                <span class="tag">MOBILE</span>
+                <h3>全端适配</h3>
+                <p>响应式设计，手机、平板、电脑完美兼容，随时随地想看就看。</p>
+                <a href="#" class="btn">ACCESS</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="movies" style="background: rgba(5,5,8,0.5);">
+    <div class="container">
+        <div class="section-head">
+            <div class="code">SECTION 02</div>
+            <h2>电影库</h2>
+            <p>// MOVIE DATABASE //</p>
+        </div>
+        <div class="cat-grid">
+            <div class="cat-item">
+                <h3>🔥 动作片</h3>
+                <p>1500+ titles</p>
+            </div>
+            <div class="cat-item">
+                <h3>😂 喜剧片</h3>
+                <p>1200+ titles</p>
+            </div>
+            <div class="cat-item">
+                <h3>💕 爱情片</h3>
+                <p>980+ titles</p>
+            </div>
+            <div class="cat-item">
+                <h3>🚀 科幻片</h3>
+                <p>750+ titles</p>
+            </div>
+            <div class="cat-item">
+                <h3>😱 恐怖片</h3>
+                <p>520+ titles</p>
+            </div>
+            <div class="cat-item">
+                <h3>🎭 剧情片</h3>
+                <p>2100+ titles</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="tv">
+    <div class="container">
+        <div class="section-head">
+            <div class="code">SECTION 03</div>
+            <h2>热播剧集</h2>
+            <p>// TRENDING SERIES //</p>
+        </div>
+        <div class="grid">
+            <div class="card">
+                <span class="tag">HOT</span>
+                <h3>国产热剧</h3>
+                <p>同步更新最新国产电视剧、网络剧、短剧资源，高清正版。</p>
+                <a href="#" class="btn">WATCH</a>
+            </div>
+            <div class="card">
+                <span class="tag">NEW</span>
+                <h3>美剧韩剧</h3>
+                <p>海外热门剧集中文翻译同步更新，追剧不等待。</p>
+                <a href="#" class="btn">WATCH</a>
+            </div>
+            <div class="card">
+                <span class="tag">VIP</span>
+                <h3>经典老剧</h3>
+                <p>怀旧经典电视剧高清修复版，重温时代记忆。</p>
+                <a href="#" class="btn">WATCH</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="update" style="background: rgba(5,5,8,0.5);">
+    <div class="container">
+        <div class="section-head">
+            <div class="code">SECTION 04</div>
+            <h2>更新日志</h2>
+            <p>// LATEST UPDATES //</p>
+        </div>
+        <div class="timeline">
+            <div class="tl-item">
+                <div class="tl-date">2026.09.30</div>
+                <div class="tl-content">
+                    <h3>《热辣滚烫》上线</h3>
+                    <p>贾玲导演兼主演，豆瓣评分 7.8，励志佳作</p>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-date">2026.09.28</div>
+                <div class="tl-content">
+                    <h3>《默杀》高清版更新</h3>
+                    <p>悬疑犯罪片，柯汶利导演，口碑持续发酵</p>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-date">2026.09.25</div>
+                <div class="tl-content">
+                    <h3>《异人之下》全季更新</h3>
+                    <p>乌尔善执导，国产奇幻动作新标杆</p>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-date">2026.09.22</div>
+                <div class="tl-content">
+                    <h3>系统升级完成</h3>
+                    <p>播放器引擎升级，加载速度提升 300%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="about">
+    <div class="container">
+        <div class="section-head">
+            <div class="code">SECTION 05</div>
+            <h2>关于 123电影网</h2>
+            <p>// SYSTEM INFO //</p>
+        </div>
+        <div class="about-wrap">
+            <div class="about-text">
+                <p><strong>123电影网</strong>（https://123dianyingwang-h5）是您的一站式影视娱乐平台，汇聚全网最新最热电影、剧集、综艺、动漫资源。</p>
+                <p>我们坚持每日更新，确保用户第一时间获取最新内容。网站采用响应式设计，完美适配手机、平板、电脑等各种设备。</p>
+                <p>简洁的界面、极速的播放体验，让观影回归纯粹乐趣。</p>
+                <div class="kw-cloud">
+                    <span>123电影网</span>
+                    <span>123dianyingwang-h5</span>
+                    <span>高清电影</span>
+                    <span>在线观看</span>
+                    <span>热播剧集</span>
+                    <span>每日更新</span>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="num">8000+</div>
+                    <div class="label">影片资源</div>
+                </div>
+                <div class="stat-box">
+                    <div class="num">4K</div>
+                    <div class="label">超清画质</div>
+                </div>
+                <div class="stat-box">
+                    <div class="num">0.5s</div>
+                    <div class="label">极速加载</div>
+                </div>
+                <div class="stat-box">
+                    <div class="num">24/7</div>
+                    <div class="label">全天候服务</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>123电影网</h4>
+                <a href="#">系统首页</a>
+                <a href="#">最新资源</a>
+                <a href="#">热门排行</a>
+            </div>
+            <div class="footer-col">
+                <h4>资源分类</h4>
+                <a href="#">电影频道</a>
+                <a href="#">电视剧集</a>
+                <a href="#">综艺动漫</a>
+            </div>
+            <div class="footer-col">
+                <h4>技术支持</h4>
+                <a href="#">帮助文档</a>
+                <a href="#">故障反馈</a>
+                <a href="#">版权声明</a>
+            </div>
+            <div class="footer-col">
+                <h4>系统连接</h4>
+                <a href="#">友情链接</a>
+                <a href="#">商务合作</a>
+                <a href="#">关于系统</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 123电影网 | SYSTEM: https://123dianyingwang-h5</p>
+            <p>KEYWORDS: 123电影网 123dianyingwang-h5 高清电影 在线观看 全网影视</p>
+            <p>[ EOF ] 本网站仅提供影视信息展示服务，所有内容均来自互联网公开资源</p>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
